@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:java="http://www.mulesoft.org/schema/mule/java"
+	xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<configuration-properties doc:name="Configuration properties" doc:id="e71ff88c-5072-4b54-9461-a8cc78fa2186" file="mule-properties.yaml" />
+	<flow name="swift-fin-example-mule4Flow" doc:id="3fc7c705-9ae8-4f22-945c-550abeacffea" >
+		<file:listener doc:name="On New or Updated File" doc:id="6268f79e-b8a8-4ae4-a47c-b38875d30714" directory="${file.resources}/in" moveToDirectory="${file.resources}/processed" overwrite="true">
+			<scheduling-strategy >
+				<fixed-frequency frequency="1" timeUnit="MINUTES"/>
+			</scheduling-strategy>
+		</file:listener>
+		<java:invoke-static method="SWIFTtoJSON(java.io.InputStream)" doc:name="Invoke static" doc:id="1debe259-e491-4f25-b15d-db7e531f4d31" class="com.dejim.SWIFTUtility">
+			<java:args ><![CDATA[#[%dw 2.0
+output application/java
+---
+{
+	fin: payload
+}]]]></java:args>
+		</java:invoke-static>
+		<logger level="INFO" doc:name="Logger" doc:id="00ae0bc9-546b-4df1-bb4a-a92f6a854929" message="#[payload]"/>
+		<file:write doc:name="Write" doc:id="f6cd476d-b820-4be5-8e87-3ab35dd7f9c5" path="${file.resources}/out/fin.json"/>
+	</flow>
+</mule>
