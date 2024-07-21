@@ -1,7 +1,7 @@
 # Convert SWIFT MT (ISO 15022) to JSON using MuleSoft
 
 ## Overview
-This is an example Mule 4.x application showing how to convert a SWIFT MT message to JSON. It leverages the open source Prowide library to handle the transformation in the Java component
+This is an example Mule 4.x application showing how to convert a SWIFT MT message to JSON. It leverages the open source [Prowide Core](https://dev.prowidesoftware.com/latest/open-source/core/) library to handle the transformation in the Java component
 
 ## Setup
 1. Download and import project into Anypoint Studio
